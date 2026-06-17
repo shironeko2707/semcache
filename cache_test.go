@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bbbb/semcache/store"
+	"github.com/shironeko2707/semcache/store"
 )
 
 // newTestCache builds a cache with a deterministic hash embedder and a fixed

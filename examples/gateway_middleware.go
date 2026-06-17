@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/bbbb/semcache"
+	"github.com/shironeko2707/semcache"
 )
 
 // callModel stands in for the expensive provider call the gateway would make.

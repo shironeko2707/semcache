@@ -4,7 +4,7 @@ import (
 	"context"
 	"hash/fnv"
 
-	"github.com/bbbb/semcache/store"
+	"github.com/shironeko2707/semcache/store"
 )
 
 // Embedder turns canonical query text into a vector. It is intentionally

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bbbb/semcache"
+	"github.com/shironeko2707/semcache"
 )
 
 // benchCache builds a cache tuned for the workload: a moderate similarity floor

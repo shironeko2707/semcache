@@ -3,7 +3,7 @@ package semcache
 import (
 	"context"
 
-	"github.com/bbbb/semcache/store"
+	"github.com/shironeko2707/semcache/store"
 )
 
 // Verifier is the second stage of a hit decision. A high cosine score clears the

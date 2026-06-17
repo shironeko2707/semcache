@@ -15,7 +15,7 @@ The default path is **zero-dependency and in-memory**. Bring your own embedder; 
 ## Install
 
 ```bash
-go get github.com/bbbb/semcache
+go get github.com/shironeko2707/semcache
 ```
 
 Requires Go 1.26+.

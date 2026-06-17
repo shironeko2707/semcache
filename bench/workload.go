@@ -11,7 +11,7 @@ import (
 	"math/rand"
 	"strings"
 
-	"github.com/bbbb/semcache"
+	"github.com/shironeko2707/semcache"
 )
 
 // base is a repeatable intent. nearMiss, when set, is a lexically-close but

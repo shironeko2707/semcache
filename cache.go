@@ -11,7 +11,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/bbbb/semcache/store"
+	"github.com/shironeko2707/semcache/store"
 )
 
 // ErrNoEmbedder is returned by New when no Embedder is supplied.
