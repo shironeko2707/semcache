@@ -88,12 +88,6 @@ On the synthetic repetitive banking workload (`bench/`), the reproducible target
 
 All workload data is synthetic. Numbers are reproducible from `make bench`.
 
-## Status & roadmap
-
-- [x] In-memory store, PII-aware keying, floor + verification, epoch/meta gating, negative cache, metrics, benchmark harness.
-- [ ] Redis / RediSearch backend behind the same `store.Store` interface (kept out of the root module to preserve the zero-dependency default).
-- [ ] ANN index for the in-memory store (today it is a flat cosine scan — exact, simple, O(n) per lookup; fine to the ~10k-entry range, swap in ANN beyond that).
-
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE). Authored independently on personal time and hardware; see [NOTICE](NOTICE).
