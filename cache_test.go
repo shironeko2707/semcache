@@ -164,7 +164,7 @@ func TestStatsHitRate(t *testing.T) {
 	c := newTestCache(t, DefaultPolicy(), time.Now)
 	_ = c.Store(ctx, Query{Text: "q one", Namespace: "n"}, Entry{Response: "1"})
 
-	c.Lookup(ctx, Query{Text: "q one", Namespace: "n"})   // hit
+	c.Lookup(ctx, Query{Text: "q one", Namespace: "n"})         // hit
 	c.Lookup(ctx, Query{Text: "totally other", Namespace: "n"}) // miss
 
 	s := c.Stats()

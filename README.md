@@ -88,6 +88,21 @@ On the synthetic repetitive banking workload (`bench/`), the reproducible target
 
 All workload data is synthetic. Numbers are reproducible from `make bench`.
 
+## Storage backends
+
+The default `store.Store` is an in-memory flat cosine scan — exact, dependency-free, and fine into the ~10k-entry range. For a shared cache across processes or a larger index, an optional RediSearch backend lives in a separate module so the root stays zero-dependency:
+
+```bash
+go get github.com/shironeko2707/semcache/store/redis
+```
+
+```go
+rs, _ := redisstore.New(ctx, redisstore.Config{Addr: "localhost:6379", Dim: 256})
+c, _ := semcache.New(embedder, semcache.WithStore(rs))
+```
+
+It uses a RediSearch cosine index for KNN and Redis key TTLs for server-side expiry. See [`store/redis/`](store/redis/). Any backend implementing `store.Store` works.
+
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE). Authored independently on personal time and hardware; see [NOTICE](NOTICE).

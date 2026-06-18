@@ -22,3 +22,30 @@ jobs:
         run: go test -race ./...
       - name: bench smoke (hit-rate + false-hit exit criterion)
         run: go test ./bench/ -run TestHitRateExitCriterion -v
+
+  redis-store:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis/redis-stack-server:latest
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          check-latest: true
+      - name: vet redis module
+        working-directory: store/redis
+        run: go vet ./...
+      - name: test redis module (live RediSearch)
+        working-directory: store/redis
+        env:
+          REDIS_ADDR: localhost:6379
+        run: go test -race ./...

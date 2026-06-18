@@ -9,17 +9,18 @@ import (
 	"time"
 )
 
-// Record is a single cached item as seen by a backend. The payload is opaque to
-// the store; the cache layer type-asserts it back to its own Entry type. Text is
-// the redacted+normalized query text (safe to persist — PII has been stripped)
-// and is used by second-stage verification.
+// Record is a single cached item as seen by a backend. The payload is an opaque
+// byte blob: the cache layer owns its (de)serialization, so backends — in-memory
+// or remote — never need to know the cache's value type. Text is the
+// redacted+normalized query text (safe to persist — PII has been stripped) and
+// is used by second-stage verification.
 type Record struct {
 	Key       string
 	Namespace string
 	Epoch     string
 	Text      string
 	Vector    []float32
-	Payload   any
+	Payload   []byte
 	Meta      map[string]string
 	CreatedAt time.Time
 	ExpiresAt time.Time // zero value means no expiry

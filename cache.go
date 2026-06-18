@@ -8,6 +8,7 @@ package semcache
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"time"
 
@@ -150,7 +151,12 @@ func (c *SemanticCache) Lookup(ctx context.Context, q Query) (Entry, bool, error
 			}
 			continue
 		}
-		entry, _ := rec.Payload.(Entry)
+		var entry Entry
+		if len(rec.Payload) > 0 {
+			if err := json.Unmarshal(rec.Payload, &entry); err != nil {
+				return Entry{}, false, err
+			}
+		}
 		c.metrics.incHit()
 		return entry, true, nil
 	}
@@ -174,13 +180,17 @@ func (c *SemanticCache) Store(ctx context.Context, q Query, resp Entry) error {
 	if resp.Epoch == "" {
 		resp.Epoch = q.Epoch
 	}
+	payload, err := json.Marshal(resp)
+	if err != nil {
+		return err
+	}
 	rec := store.Record{
 		Key:       deriveKey(q.Namespace, q.Epoch, canonical),
 		Namespace: q.Namespace,
 		Epoch:     q.Epoch,
 		Text:      canonical,
 		Vector:    vec,
-		Payload:   resp,
+		Payload:   payload,
 		Meta:      q.Meta,
 		CreatedAt: now,
 		ExpiresAt: c.expiry(now),
