@@ -179,6 +179,28 @@ func TestStatsHitRate(t *testing.T) {
 	}
 }
 
+// TestCacheWithHNSWStore confirms the cache works end-to-end against the ANN
+// backend: a hit round-trips the payload and a PII-only difference collapses to
+// the same entry.
+func TestCacheWithHNSWStore(t *testing.T) {
+	ctx := context.Background()
+	c, err := New(NewHashEmbedder(256), WithStore(store.NewHNSW(store.WithHNSWSeed(1))))
+	if err != nil {
+		t.Fatalf("New: %v", err)
+	}
+	q := Query{Text: "what is the transfer status for account 1234567890", Namespace: "ops"}
+	if err := c.Store(ctx, q, Entry{Response: "pending"}); err != nil {
+		t.Fatalf("Store: %v", err)
+	}
+	got, found, err := c.Lookup(ctx, q)
+	if err != nil || !found || got.Response != "pending" {
+		t.Fatalf("exact repeat over HNSW: found=%v resp=%q err=%v", found, got.Response, err)
+	}
+	if _, found, _ := c.Lookup(ctx, Query{Text: "what is the transfer status for account 9999999999", Namespace: "ops"}); !found {
+		t.Fatal("PII-only difference should hit the same entry over HNSW")
+	}
+}
+
 func TestMemoryEviction(t *testing.T) {
 	ctx := context.Background()
 	evicted := 0

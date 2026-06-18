@@ -90,7 +90,15 @@ All workload data is synthetic. Numbers are reproducible from `make bench`.
 
 ## Storage backends
 
-The default `store.Store` is an in-memory flat cosine scan — exact, dependency-free, and fine into the ~10k-entry range. For a shared cache across processes or a larger index, an optional RediSearch backend lives in a separate module so the root stays zero-dependency:
+The default `store.Store` is `store.NewMemory()` — an in-memory flat cosine scan: exact, dependency-free, and fine into the ~10k-entry range.
+
+For larger in-process indexes, `store.NewHNSW()` is a pure-Go (still zero-dependency) approximate-nearest-neighbour graph. On 20k×128-d vectors it is ~17× faster per lookup than the flat scan (≈0.3ms vs ≈5ms) at recall@10 ≈ 0.98:
+
+```go
+c, _ := semcache.New(embedder, semcache.WithStore(store.NewHNSW()))
+```
+
+For a shared cache across processes or persistence, an optional RediSearch backend lives in a separate module so the root stays zero-dependency:
 
 ```bash
 go get github.com/shironeko2707/semcache/store/redis
